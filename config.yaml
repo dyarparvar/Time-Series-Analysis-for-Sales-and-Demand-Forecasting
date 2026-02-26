@@ -1,0 +1,387 @@
+randomness_strategy:
+  seed: 42
+missing_value_strategy:
+  missing_volume: no sale
+books:
+  recency_cutoff_date: '2024-07-01'
+  titles:
+  - Alchemist,The
+  - Very Hungry Caterpillar,The
+  cutoff_date: '2012-01-01'
+decomposition:
+  period: 52
+  seasonal:
+  - 7
+  - 13
+  - 25
+  trend:
+  - 79
+  - 157
+  - 261
+  robust: false
+  alpha: 0.05
+auto_arima:
+  weekly_data:
+    alchemist:
+      train_start: '2012-01-01'
+      forecast_horizon: 32
+      transformation: false
+      conf_int: true
+      exogenous: false
+      model:
+        start_p: 1
+        d: null
+        start_q: 1
+        max_p: 3
+        max_d: 2
+        max_q: 3
+        seasonal: true
+        m: 52
+        start_P: 1
+        D: null
+        start_Q: 1
+        max_P: 2
+        max_D: 1
+        max_Q: 2
+        max_order: 5
+        information_criterion: aic
+        stationary: false
+        alpha: 0.05
+        stepwise: true
+        n_jobs: -1
+        random_state: 42
+        trace: true
+        method: lbfgs
+        maxiter: 100
+        suppress_warnings: false
+        error_action: ignore
+        with_intercept: auto
+        out_of_sample_size: 0
+        scoring: mse
+    caterpillar:
+      train_start: '2012-01-01'
+      forecast_horizon: 32
+      transformation: false
+      conf_int: true
+      exogenous: false
+      model:
+        start_p: 1
+        d: 1
+        start_q: 1
+        max_p: 3
+        max_d: 2
+        max_q: 3
+        seasonal: true
+        m: 52
+        start_P: 1
+        D: null
+        start_Q: 1
+        max_P: 2
+        max_D: 1
+        max_Q: 2
+        max_order: 8
+        information_criterion: aic
+        stationary: false
+        alpha: 0.05
+        stepwise: true
+        n_jobs: -1
+        random_state: 42
+        trace: true
+        method: lbfgs
+        maxiter: 100
+        suppress_warnings: false
+        error_action: ignore
+        with_intercept: auto
+        out_of_sample_size: 0
+        scoring: mse
+  monthly_data:
+    alchemist:
+      train_start: '2012-01-01'
+      forecast_horizon: 8
+      transformation: false
+      conf_int: true
+      exogenous: false
+      model:
+        start_p: 1
+        d: 1
+        start_q: 1
+        max_p: 3
+        max_d: 2
+        max_q: 3
+        seasonal: true
+        m: 12
+        start_P: 1
+        D: 1
+        start_Q: 1
+        max_P: 2
+        max_D: 1
+        max_Q: 2
+        max_order: 5
+        information_criterion: aic
+        stationary: false
+        alpha: 0.05
+        stepwise: true
+        n_jobs: -1
+        random_state: 42
+        trace: true
+        method: lbfgs
+        maxiter: 50
+        suppress_warnings: false
+        error_action: ignore
+        with_intercept: auto
+        out_of_sample_size: 0
+        scoring: mse
+    caterpillar:
+      train_start: '2012-01-01'
+      forecast_horizon: 8
+      transformation: false
+      conf_int: true
+      exogenous: false
+      model:
+        start_p: 1
+        d: 1
+        start_q: 1
+        max_p: 3
+        max_d: 2
+        max_q: 3
+        seasonal: true
+        m: 12
+        start_P: 1
+        D: 1
+        start_Q: 1
+        max_P: 2
+        max_D: 1
+        max_Q: 2
+        max_order: 8
+        information_criterion: aic
+        stationary: false
+        alpha: 0.05
+        stepwise: true
+        n_jobs: -1
+        random_state: 42
+        trace: true
+        method: lbfgs
+        maxiter: 50
+        suppress_warnings: false
+        error_action: ignore
+        with_intercept: auto
+        out_of_sample_size: 0
+        scoring: mse
+xgboost:
+  weekly_data:
+    data:
+      train_start: '2012-01-01'
+      forecast_horizon: 32
+      model:
+        alchemist: additive
+        caterpillar: multiplicative
+    regressor:
+      n_estimators: 200
+      learning_rate: 0.05
+      booster: gbtree
+      tree_method: exact
+      objective: reg:squarederror
+      max_depth: 5
+      min_child_weight: 3
+      gamma: 0.1
+      reg_alpha: 0
+      reg_lambda: 1
+      subsample: 0.8
+      validate_parameters: 1
+      random_state: 42
+      n_jobs: -1
+      base_score: 0.5
+    predictor:
+      sp: 52
+      degree:
+        alchemist: 1
+        caterpillar: 2
+      window_length:
+        alchemist: 52
+        caterpillar: 104
+      model:
+        alchemist: additive
+        caterpillar: multiplicative
+      strategy: recursive
+    grid_search:
+      initial_window: 0.8
+      strategy: refit
+      n_jobs: -1
+      backend: threading
+      error_score: raise
+      verbose: 1
+      scoring: !!python/object:sktime.performance_metrics.forecasting._mae.MeanAbsoluteError
+        multioutput: uniform_average
+        multilevel: uniform_average
+        by_index: false
+        name: MeanAbsoluteError
+        _tags_dynamic: {}
+        _config_dynamic: {}
+      param_grid:
+        alchemist:
+          forecast__window_length:
+          - 52
+          - 78
+          - 104
+        caterpillar:
+          forecast__window_length:
+          - 52
+          - 78
+          - 104
+          - 130
+  monthly_data:
+    data:
+      train_start: '2012-01-01'
+      forecast_horizon: 8
+      model:
+        alchemist: additive
+        caterpillar: multiplicative
+    regressor:
+      n_estimators: 200
+      learning_rate: 0.05
+      booster: gbtree
+      tree_method: exact
+      objective: reg:squarederror
+      max_depth: 5
+      min_child_weight: 3
+      gamma: 0.1
+      reg_alpha: 0
+      reg_lambda: 1
+      subsample: 0.9
+      validate_parameters: 1
+      random_state: 42
+      n_jobs: -1
+      base_score: 0.5
+    predictor:
+      sp: 12
+      degree:
+        alchemist: 1
+        caterpillar: 2
+      window_length:
+        alchemist: 12
+        caterpillar: 24
+      model:
+        alchemist: additive
+        caterpillar: multiplicative
+      strategy: recursive
+    grid_search:
+      initial_window: 0.7
+      strategy: refit
+      n_jobs: -1
+      backend: threading
+      error_score: raise
+      verbose: 1
+      scoring: !!python/object:sktime.performance_metrics.forecasting._mae.MeanAbsoluteError
+        multioutput: uniform_average
+        multilevel: uniform_average
+        by_index: false
+        name: MeanAbsoluteError
+        _tags_dynamic: {}
+        _config_dynamic: {}
+      param_grid:
+        alchemist:
+          forecast__window_length:
+          - 12
+          - 18
+          - 24
+        caterpillar:
+          forecast__window_length:
+          - 12
+          - 18
+          - 24
+          - 36
+lstm_config:
+  train_start: '2012-01-01'
+  lookback: 104
+  forecast_horizon: 32
+  validation_split: 0.2
+  hidden_activation: tanh
+  output_activation: linear
+  dropout_rate: 0.2
+  loss: mse
+  metrics:
+  - mae
+  epochs: 100
+  batch_size: 32
+  early_stoppying_monitor: val_loss
+  patience: 10
+  checkpoint_monitor:
+    loss:
+    - val_loss
+    - min
+    mae:
+    - mae
+    - min
+  param_grid:
+    n_neuron_indx:
+    - 0
+    - 1
+    - 2
+    n_neuron:
+    - - 32
+      - 16
+    - - 64
+      - 32
+    - - 128
+      - 64
+      - 32
+    optimizer:
+    - adam
+    - rmsprop
+    learning_rate:
+    - 0.0005
+    - 0.001
+  tuner_objective: val_loss
+hybrid_config:
+  train_start: '2012-01-01'
+  lookback: 104
+  forecast_horizon: 32
+  validation_split: 0.2
+  hidden_activation: tanh
+  output_activation: linear
+  dropout_rate: 0.2
+  loss: mse
+  metrics:
+  - mae
+  epochs: 50
+  batch_size: 32
+  early_stoppying_monitor: val_loss
+  patience: 7
+  checkpoint_monitor:
+    loss:
+    - val_loss
+    - min
+    mae:
+    - mae
+    - min
+  param_grid:
+    n_neuron_indx:
+    - 0
+    - 1
+    - 2
+    n_neuron:
+    - - 8
+      - 8
+    - - 16
+      - 8
+    - - 32
+      - 16
+    optimizer:
+    - adam
+    - rmsprop
+    learning_rate:
+    - 0.0005
+    - 0.001
+  tuner_objective: val_loss
+  weights:
+  - 0
+  - 0.1
+  - 0.2
+  - 0.3
+  - 0.4
+  - 0.5
+  - 0.6
+  - 0.7
+  - 0.8
+  - 0.9
+  - 1
