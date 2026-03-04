@@ -1,4 +1,4 @@
-# Time-Series-Analysis-For-Sales-and-Demand-Forecasting
+# Time Series Analysis For Sales And Demand Forecasting
 **Darya Yarparvar** | February 2026
 ______________________________________________________________
 
